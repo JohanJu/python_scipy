@@ -1,1 +1,2 @@
 # Reversi
+reversi project
