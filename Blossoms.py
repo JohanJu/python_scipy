@@ -9,53 +9,41 @@ class Spline():
 #    ui = []
     def __call__(self):
         print("call")
-    def __init__(self,ui):
+    def __init__(self,ui,dx,dy):
         self.ui=array(ui)
-        self.dx=array(zeros(ui.size))
-        self.dy=array(zeros(ui.size))
-        self.dx[3]=2;
-        self.dy[3]=3;
-        self.dx[4]=4;
-        self.dy[4]=3;
-        self.dx[5]=4;
-        self.dy[5]=1;
-#        print(self)
+        self.dx=dx
+        self.dy=dy
+        self.initArr()
+#        print(self.x)
         
-    def plot(self,cp,db):
-        x = array(zeros(1000))
-        y = array(zeros(1000))
+    def initArr(self):
+        self.x = array(zeros(100))
+        self.y = array(zeros(100))
         for i in range(self.ui.size-3):
             xp = []
             yp = []
-            b = self.basisFunction3(i, array([0.,1,2,3,4,5,6,7,8,9,10]))
-            ls = linspace(self.ui[0], self.ui[-1],1000)
+            b = self.basisFunction3(i, self.ui)
+            ls = linspace(self.ui[0], self.ui[-1],100)
             for k in ls:
                xp.append(self.dx[i]*b(k))
                yp.append(self.dy[i]*b(k)) 
-            x+=array(xp)
-            y+=array(yp)
+            self.x+=array(xp)
+            self.y+=array(yp)
              
-        plot(x,y)
        
                 
-            
+    def plot(self,db,cp):   
+        plot(self.x,self.y)
         if(db):
             plot(self.dx,self.dy,'o')
         if(cp):
             plot(self.dx,self.dy,'--')
-        xlim(-.5, 5.5)
-        ylim(-.5, 5.5)          
+        xlim(-.5, 15.5)
+        ylim(-.5, 10.5)          
         
-#    def plotPart(self,f,i):
-#        x = []
-#        y = []
-#        ls = linspace(self.ui[i], self.ui[i+1])
-#        print(self.ui[i])
-#        print(self.ui[i+1])
-#        for k in ls:
-#            x.append(self.dx[i]*f(k))
-#            y.append(self.dy[i]*f(k)) 
-#        plot(x,y)
+    def change(self,index,x,y):
+        self.dx[index]=x
+        self.dy[index]=y
     
     def basisFunction3 (self,j,u):
         return self.basisFunction(j,u,3)
@@ -85,14 +73,18 @@ class Spline():
             y.append(f(k)) 
         plot(x,y)
         
-mui= array([0.,1,2,3,4,5,6,7,8,9,10])
-s=Spline(mui)
-basisF = s.basisFunction(2, array([0.,1,2,3,4,5,6,7,8,9,10]),3)
-print(basisF(4))
-basisF3 = s.basisFunction3(3, array([0.,1,2,3,4,5,6,7,8,9,10]))
-print(basisF3(4))
+mui= array(range(16))
+dx = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
+dy = array([0,0,0,1,4,6,8,10,10,8,4,2,2,0,0,0])
+s=Spline(mui,dx,dy)
+#basisF = s.basisFunction(0, array([0.,1,2,3,4,5,6,7,8,9,10]),3)
+#print(basisF(4))
+#basisF3 = s.basisFunction3(3, array([0.,1,2,3,4,5,6,7,8,9,10]))
+#print(basisF3(4))
  
 #s.plotFunction(basisF,0,9)
 #s.plotFunction(basisF3,0,9)
  
 s.plot(1,1)
+#s.dy[6]=6
+#s.plot(1,1)
