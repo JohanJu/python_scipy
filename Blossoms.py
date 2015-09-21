@@ -7,8 +7,9 @@ Task 3
 """
 class Spline():
 #    ui = []
-    def __call__(self):
-        print("call")
+    def __call__(self,u):
+        I = (self.ui>=u).argmax()-1
+        return self.dy[I-2]*self.bl[I-2](u)+self.dy[I-1]*self.bl[I-1](u)+self.dy[I]*self.bl[I](u)+self.dy[I+1]*self.bl[I+1](u)
     def __init__(self,ui,dx,dy):
         self.ui=array(ui)
         self.dx=dx
@@ -19,14 +20,15 @@ class Spline():
     def initArr(self):
         self.x = array(zeros(100))
         self.y = array(zeros(100))
+        self.bl = []
         for i in range(self.ui.size-3):
             xp = []
             yp = []
-            b = self.basisFunction3(i, self.ui)
+            self.bl.append(self.basisFunction3(i, self.ui))
             ls = linspace(self.ui[0], self.ui[-1],100)
             for k in ls:
-               xp.append(self.dx[i]*b(k))
-               yp.append(self.dy[i]*b(k)) 
+               xp.append(self.dx[i]*self.bl[-1](k))
+               yp.append(self.dy[i]*self.bl[-1](k)) 
             self.x+=array(xp)
             self.y+=array(yp)
              
