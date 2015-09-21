@@ -61,7 +61,6 @@ class Spline():
             y.append(self.Blossom(l,I-1,d))
         plot(x,y)
 
-    
     # return s(u)
     def evaluateFromBasisFunction(self, u):
         sum = 0
