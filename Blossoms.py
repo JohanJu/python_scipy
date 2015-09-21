@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from scipy import *
 from pylab import *
-
+rcParams['figure.figsize'] = 8, 6
 """
 Task 3 
 """
@@ -13,17 +13,49 @@ class Spline():
         self.ui=array(ui)
         self.dx=array(zeros(ui.size))
         self.dy=array(zeros(ui.size))
-        self.dx[1]=2;
-        self.dy[1]=3;
-        self.dx[2]=1;
-        self.dy[2]=2;
+        self.dx[3]=2;
+        self.dy[3]=3;
+        self.dx[4]=4;
+        self.dy[4]=3;
+        self.dx[5]=4;
+        self.dy[5]=1;
 #        print(self)
         
     def plot(self,cp,db):
+        x = array(zeros(1000))
+        y = array(zeros(1000))
+        for i in range(self.ui.size-3):
+            xp = []
+            yp = []
+            b = self.basisFunction3(i, array([0.,1,2,3,4,5,6,7,8,9,10]))
+            ls = linspace(self.ui[0], self.ui[-1],1000)
+            for k in ls:
+               xp.append(self.dx[i]*b(k))
+               yp.append(self.dy[i]*b(k)) 
+            x+=array(xp)
+            y+=array(yp)
+             
+        plot(x,y)
+       
+                
+            
         if(db):
             plot(self.dx,self.dy,'o')
         if(cp):
             plot(self.dx,self.dy,'--')
+        xlim(-.5, 5.5)
+        ylim(-.5, 5.5)          
+        
+#    def plotPart(self,f,i):
+#        x = []
+#        y = []
+#        ls = linspace(self.ui[i], self.ui[i+1])
+#        print(self.ui[i])
+#        print(self.ui[i+1])
+#        for k in ls:
+#            x.append(self.dx[i]*f(k))
+#            y.append(self.dy[i]*f(k)) 
+#        plot(x,y)
     
     def basisFunction3 (self,j,u):
         return self.basisFunction(j,u,3)
@@ -63,4 +95,4 @@ print(basisF3(4))
 #s.plotFunction(basisF,0,9)
 #s.plotFunction(basisF3,0,9)
  
-s.plot(1,0)
+s.plot(1,1)
