@@ -33,13 +33,14 @@ class Spline():
        
                 
     def plot(self,db,cp):   
-        plot(self.x,self.y)
+        l = linspace(self.ui[0],self.ui[-1],100)
+        plot(l,self.y)
         if(db):
-            plot(self.dx,self.dy,'o')
+            plot(ui+1,self.dy,'o')
         if(cp):
-            plot(self.dx,self.dy,'--')
-        xlim(-.5, 15.5)
-        ylim(-.5, 10.5)          
+            plot(ui+1,self.dy,'--')
+#        xlim(-.5, 15.5)
+#        ylim(-.5, 10.5)          
         
     def change(self,index,x,y):
         self.dx[index]=x
@@ -73,7 +74,7 @@ class Spline():
             y.append(f(k)) 
         plot(x,y)
         
-mui= array(range(16))
+mui= array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
 dx = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
 dy = array([0,0,0,1,4,6,8,10,10,8,4,2,2,0,0,0])
 s=Spline(mui,dx,dy)
