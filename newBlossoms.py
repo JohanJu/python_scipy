@@ -5,7 +5,7 @@ Created on Mon Sep 21 14:22:56 2015
 @author: Admin
 """
 ui= array(range(16))
-d = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
+d = array([0,0,0,1,4,6,8,0,10,8,4,2,2,0,0,0])
 
 def Alpha(u, rm, lm):
     return (rm-u)/(rm-lm)
@@ -20,7 +20,11 @@ def Blossom(u, I):
     
     return Alpha(u, ui[I+3], ui[I-2])*d21+(1-Alpha(u,ui[I+3], ui[I-2]))*d22   
 
-print(Blossom(90,7))
+y=[]
+for i in range(2,12):
+    y.append(Blossom(i, i))
+
+plot(range(2,12),y)
 
 
 

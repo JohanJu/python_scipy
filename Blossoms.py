@@ -36,9 +36,9 @@ class Spline():
         l = linspace(self.ui[0],self.ui[-1],100)
         plot(l,self.y)
         if(db):
-            plot(ui+1,self.dy,'o')
+            plot(self.ui+1,self.dy,'o')
         if(cp):
-            plot(ui+1,self.dy,'--')
+            plot(self.ui+1,self.dy,'--')
 #        xlim(-.5, 15.5)
 #        ylim(-.5, 10.5)          
         
@@ -76,16 +76,41 @@ class Spline():
         
 mui= array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
 dx = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
-dy = array([0,0,0,1,4,6,8,10,10,8,4,2,2,0,0,0])
+dy = array([0,0,0,1,4,6,8,0,10,8,4,2,2,0,0,0])
 s=Spline(mui,dx,dy)
-#basisF = s.basisFunction(0, array([0.,1,2,3,4,5,6,7,8,9,10]),3)
-#print(basisF(4))
+s.plot(1,1)
+
+ui= array(range(16))
+d = array([0,0,0,1,4,6,8,0,10,8,4,2,2,0,0,0])
+
+def Alpha(u, rm, lm):
+    return (rm-u)/(rm-lm)
+
+def Blossom(u, I):
+#    d11 = Alpha(u,ui[I+1],ui[I-2])*d[I-2]+(1-Alpha(u,ui[I+1], ui[I-2]))*d[I-1]
+#    d12 = Alpha(u, ui[I+2], ui[I-1])*d[I-1]+(1-Alpha(u,ui[I+2], ui[I-1]))*d[I]
+#    d13 = Alpha(u, ui[I+3], ui[I])*d[I]+(1-Alpha(u,ui[I+3], ui[I]))*d[I+1]
+#    
+#    d21 = Alpha(u, ui[I+2], ui[I-2])*d11+(1-Alpha(u,ui[I+2], ui[I-2]))*d12
+#    d22 = Alpha(u, ui[I+3], ui[I-1])*d12+(1-Alpha(u,ui[I+3], ui[I-1]))*d13
+#    return Alpha(u, ui[I+3], ui[I-2])*d21+(1-Alpha(u,ui[I+3], ui[I-2]))*d22
+    d11 = Alpha(u,ui[I+1],ui[I-2])*d[I-2]+(1-Alpha(u,ui[I+1], ui[I-2]))*d[I-1]
+    d12 = Alpha(u, ui[I+2], ui[I-1])*d[I-1]+(1-Alpha(u,ui[I+2], ui[I-1]))*d[I]
+    d13 = Alpha(u, ui[I+3], ui[I])*d[I]+(1-Alpha(u,ui[I+3], ui[I]))*d[I+1]
+    
+    d21 = Alpha(u, ui[I+1], ui[I-1])*d11+(1-Alpha(u,ui[I+1], ui[I-1]))*d12
+    d22 = Alpha(u, ui[I+2], ui[I])*d12+(1-Alpha(u,ui[I+2], ui[I]))*d13
+    
+    return Alpha(u, ui[I+1], ui[I])*d21+(1-Alpha(u,ui[I+1], ui[I]))*d22 
+    
+       
+
+y=[]
+for i in range(2,12):
+    y.append(Blossom(i, i))
+
+plot(range(2,12),y,'o')
+
 #basisF3 = s.basisFunction3(3, array([0.,1,2,3,4,5,6,7,8,9,10]))
 #print(basisF3(4))
- 
-#s.plotFunction(basisF,0,9)
 #s.plotFunction(basisF3,0,9)
- 
-s.plot(1,1)
-#s.dy[6]=6
-#s.plot(1,1)
