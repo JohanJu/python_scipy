@@ -7,6 +7,8 @@ This is a temporary script file.
 from scipy import *
 from pylab import *
 
+
+
 class Spline():
     
     def __init__(self, ui, d):
@@ -106,8 +108,6 @@ class Spline():
             func2 = self.basisFunction(i+1,u,K-1)
             return fac1*func1(x) + fac2*func2(x)
         return function
-
-
 
 
 ui= array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
