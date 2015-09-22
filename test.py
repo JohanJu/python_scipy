@@ -13,11 +13,10 @@ import unittest
 
 class Test(unittest.TestCase):
     def test(self):
-        mui= array(range(16))
-        dx = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
-        dy = array([0,0,0,1,4,6,8,10,10,8,4,2,2,0,0,0])
-        s = Spline(mui, dx, dy)
-        bs = BlossomSpline(mui,dx,dy)
+        ui= array(range(16))
+        d = array([0,0,0,1,4,6,8,10,10,8,4,2,2,0,0,0])
+        s = Spline(ui, d)
+        bs = BlossomSpline(ui,d)
         l = linspace(3,11,20)
         for i in l:
            self.assertAlmostEqual(bs(i), s(i))

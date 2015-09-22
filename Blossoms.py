@@ -9,44 +9,33 @@ class Spline():
 #    ui = []
     def __call__(self,u):
         I = (self.ui>=u).argmax()-1
-        return self.dy[I-2]*self.bl[I-2](u)+self.dy[I-1]*self.bl[I-1](u)+self.dy[I]*self.bl[I](u)+self.dy[I+1]*self.bl[I+1](u)
-    def __init__(self,ui,dx,dy):
+        return self.d[I-2]*self.baseList[I-2](u)+self.d[I-1]*self.baseList[I-1](u)+self.d[I]*self.baseList[I](u)+self.d[I+1]*self.baseList[I+1](u)
+   
+    def __init__(self,ui,d):
         self.ui=array(ui)
-        self.dx=dx
-        self.dy=dy
+        self.d=d
         self.initArr()
-#        print(self.x)
         
     def initArr(self):
-        self.x = array(zeros(100))
+        # y is a vector which contais s(x)
         self.y = array(zeros(100))
-        self.bl = []
+        self.x = linspace(self.ui[0], self.ui[-1],100)
+        self.baseList = []
         for i in range(self.ui.size-3):
-            xp = []
             yp = []
-            self.bl.append(self.basisFunction3(i, self.ui))
-            ls = linspace(self.ui[0], self.ui[-1],100)
-            for k in ls:
-               xp.append(self.dx[i]*self.bl[-1](k))
-               yp.append(self.dy[i]*self.bl[-1](k)) 
-            self.x+=array(xp)
+            self.baseList.append(self.basisFunction3(i, self.ui))
+            for k in self.x:
+               yp.append(self.d[i]*self.baseList[-1](k)) 
             self.y+=array(yp)
              
-       
                 
-    def plot(self,db,cp):   
-        l = linspace(self.ui[0],self.ui[-1],100)
-        plot(l,self.y)
-        if(db):
-            plot(self.ui+1,self.dy,'o')
-        if(cp):
-            plot(self.ui+1,self.dy,'--')
-#        xlim(-.5, 15.5)
-#        ylim(-.5, 10.5)          
-        
-    def change(self,index,x,y):
-        self.dx[index]=x
-        self.dy[index]=y
+    def plot(self,deBoorPoints,controlPolygon):   
+        plot(self.x,self.y)
+        if(deBoorPoints):
+            plot(self.ui+1,self.d,'o')
+        if(controlPolygon):
+            plot(self.ui+1,self.d,'--')
+
     
     def basisFunction3 (self,j,u):
         return self.basisFunction(j,u,3)
@@ -76,10 +65,9 @@ class Spline():
             y.append(f(k)) 
         plot(x,y)
         
-mui= array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
-dx = array([0,0,0,1,2,3,5,8,10,10,8,6,3,0,0,0])
-dy = array([0,0,0,1,4,6,8,0,10,8,4,2,2,0,0,0])
-s=Spline(mui,dx,dy)
+ui= array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
+d = array([0,0,0,1,4,6,8,0,10,8,4,2,2,0,0,0])
+s=Spline(ui,d)
 s.plot(0,1)
 
 
@@ -93,10 +81,9 @@ class BlossomSpline():
         d21 = self.alpha(u, self.ui[I+1], self.ui[I-1])*d11+(1-self.alpha(u,self.ui[I+1], self.ui[I-1]))*d12
         d22 = self.alpha(u, self.ui[I+2], self.ui[I])*d12+(1-self.alpha(u,self.ui[I+2], self.ui[I]))*d13
         return self.alpha(u, self.ui[I+1], self.ui[I])*d21+(1-self.alpha(u,self.ui[I+1], self.ui[I]))*d22 
-    def __init__(self,ui,dx,dy):
+    def __init__(self,ui,d):
         self.ui=ui
-        self.dx=dx
-        self.d=dy
+        self.d=d
     def alpha(self,u, rm, lm):
         return (rm-u)/(rm-lm)
     def plot(self,start,end,nbr):
@@ -106,5 +93,8 @@ class BlossomSpline():
             ly.append(self(i))
         plot(lx,ly,'o')
         
-bs=BlossomSpline(mui,dx,dy)
+bs=BlossomSpline(ui,d)
 bs.plot(2,13,30)
+
+import unittest
+
