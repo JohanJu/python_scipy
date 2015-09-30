@@ -75,17 +75,21 @@ class BlossomSpline():
     
     def __call__(self,u):
         I = (self.ui>=u).argmax()-1
+        
         d11 = self.alpha(u,self.ui[I+1],self.ui[I-2])*self.d[I-2]+(1-self.alpha(u,self.ui[I+1], self.ui[I-2]))*self.d[I-1]
         d12 = self.alpha(u, self.ui[I+2], self.ui[I-1])*self.d[I-1]+(1-self.alpha(u,self.ui[I+2], self.ui[I-1]))*self.d[I]
         d13 = self.alpha(u, self.ui[I+3], self.ui[I])*self.d[I]+(1-self.alpha(u,self.ui[I+3], self.ui[I]))*self.d[I+1]
+
         d21 = self.alpha(u, self.ui[I+1], self.ui[I-1])*d11+(1-self.alpha(u,self.ui[I+1], self.ui[I-1]))*d12
         d22 = self.alpha(u, self.ui[I+2], self.ui[I])*d12+(1-self.alpha(u,self.ui[I+2], self.ui[I]))*d13
+
         return self.alpha(u, self.ui[I+1], self.ui[I])*d21+(1-self.alpha(u,self.ui[I+1], self.ui[I]))*d22 
     def __init__(self,ui,d):
         self.ui=ui
         self.d=d
     def alpha(self,u, rm, lm):
         return (rm-u)/(rm-lm)
+#        return (self.ui[rm)]-u)/(self.ui[rm)]-self.ui[lm)])
     def plot(self,start,end,nbr):
         lx = linspace(start,end,nbr)
         ly = []
