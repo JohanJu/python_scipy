@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+from scipy import *
+class QuasiNewton:
+    def __init__(self,problem,H,a):
+        self.problem = problem
+        self.H = H
+        self.a = a
+        
+    def slove(self,x,tolerance):
+        error = 1000;
+        h = eye(len(x))
+        while(error>tolerance):
+            s=-dot(h,self.problem.grad(x))
+            xn = x+self.a(self.problem(),x,s)*x
+            error = 0 #some norm
+            delta = xn-x
+            gamma = self.problem.grad(x)-self.problem.grad(x)
+            x = xn
+            h=self.H(h,delta,gamma)
+        
+        return x
