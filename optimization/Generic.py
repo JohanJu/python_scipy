@@ -14,7 +14,7 @@ class QuasiNewton:
             xn = x+self.a(self.problem(),x,s)*x
             error = 0 #some norm
             delta = xn-x
-            gamma = self.problem.grad(x)-self.problem.grad(x)
+            gamma = self.problem.grad(xn)-self.problem.grad(x)
             x = xn
             h=self.H(h,delta,gamma)
         
