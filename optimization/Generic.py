@@ -12,10 +12,10 @@ class QuasiNewton:
         while(error>tolerance):
             s=-dot(h,self.problem.grad(x))
             xn = x+self.a(self.problem(),x,s)*x
-            error = 0 #some norm
+            p = self.problem()
+            error = abs(p(xn)-p(x))
             delta = xn-x
             gamma = self.problem.grad(xn)-self.problem.grad(x)
             x = xn
             h=self.H(h,delta,gamma)
-        
         return x
