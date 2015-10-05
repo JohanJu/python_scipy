@@ -17,7 +17,7 @@ class QuasiNewton():
             print("1")
             sys.stdout.flush()
             s=-dot(h,self.problem.grad(x))
-            xn = x+self.a(self.problem(),x,s)*s     #xn = x + a*s ? 
+            xn = x+self.a(self.problem(),x,s)*s
             p = self.problem()
             error = abs(p.func(xn)-p.func(x))
             delta = xn-x
