@@ -24,4 +24,3 @@ class Problem():
                 x[i] -= eps
                 g[i] = (t-self.f(x))/eps;
             return g
-

@@ -5,7 +5,7 @@ from scipy import optimize as op
 class InExactLine():
    
     def __init__(self):
-        self.p=0.1
+        self.p=0.2
         self.s=0.7
         self.t=0.1
         self.x=9.
@@ -40,8 +40,7 @@ class InExactLine():
             gradOfaL = self.der(p,aL,x,s)
             gradOfa0 = self.der(p,a0,x,s)
             
-        print(a0)
-        return a0, fOfa0
+        return a0
         
     def der(self,p,a0,x,s):
         eps = 2**(-30)
@@ -74,15 +73,15 @@ class InExactLine():
     '''
 
     #Goldstein conditions
-    def LC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
+    def LC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
         return fOfa0 >= (fOfaL + (1-self.p)*(a0-aL)*gradOfaL)
-    def RC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
+    def RC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
         return fOfa0 <= (fOfaL + self.p*(a0-aL)*gradOfaL)
     
     #Wolfe-Powell conditions
-    def LC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
+    def LC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
         return gradOfa0 >= self.s*gradOfaL
-    def RC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
+    def RC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
         return gradOfa0 <= (fOfaL + self.p*(a0-aL)*gradOfaL)
     
 

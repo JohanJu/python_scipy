@@ -13,9 +13,9 @@ class DFPRank2Update(QuasiNewton):
     def nextH(self,H,delta,gamma):
         deltaTranspose = delta.transpose()
         gammaTranspose = gamma.transpose()
-        HTimesGamma = H*gamma
-        term1 = (delta*deltaTranspose)/(deltaTranspose*gamma)
-        term2 = (HTimesGamma*gammaTranspose*H)/(gammaTranspose*HTimesGamma)
+        HTimesGamma = H.dot(gamma)
+        term1 = (delta.dot(deltaTranspose))/(deltaTranspose.dot(gamma))
+        term2 = (HTimesGamma.dot(gammaTranspose.dot(H)))/(gammaTranspose.dot(HTimesGamma))  
         return H + term1 - term2
 
 class BFGSRank2Update():  
