@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Generic import QuasiNewton
 from scipy import *
 class BadBroyden():
     def __call__(self,h,delta,gamma):
@@ -8,8 +9,8 @@ class GoodBroyden():
     def __call__(self,h,delta,gamma):
         return h #some update
 
-class DFPRank2Update():    
-    def __call__(self,H,delta,gamma):
+class DFPRank2Update(QuasiNewton):    
+    def nextH(self,H,delta,gamma):
         deltaTranspose = delta.transpose()
         gammaTranspose = gamma.transpose()
         HTimesGamma = H*gamma

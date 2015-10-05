@@ -16,14 +16,17 @@ class InExactLine():
         fOfa0 = f(a_0)
         gradOfaL = f'(a_L)
         gradOfa0 = f'(a_0)
+        
         '''
-        fOfaL = f(aL)
-        fOfa0 = f(a0)
-        gradOfaL = f.grad(aL)
-        gradOfa0 = f.grad(a0)
         aL = 0
         aU = 10**99
-        a0 = x
+        a0 = 0
+        
+        fOfaL = f(x+aL*s)
+        fOfa0 = f(x+a0*s)
+        gradOfaL = f.grad(x+aL*s)
+        gradOfa0 = f.grad(x+a0*s)
+        
         
         while not (LC(a0,aL,fOfa0,fOfaL,gradOfaL) and RC(a0,aL,fOfa0,fOfaL,gradOfaL)):
             if not LC(a0,aL,fOfa0,fOfaL,gradOfaL):
@@ -31,10 +34,10 @@ class InExactLine():
             else:
                 a0,aU = block2(a0,aU,aL,gradOfaL,fOfaL,fOfa0)
             
-            fOfaL = f(aL)
-            fOfa0 = f(a0)
-            gradOfaL = f.grad(aL)
-            gradOfa0 = f.grad(a0)
+            fOfaL = f(x+aL*s)
+            fOfa0 = f(x+a0*s)
+            gradOfaL = f.grad(x+aL*s)
+            gradOfa0 = f.grad(x+a0*s)
             
         return a0, fOfa0
         
@@ -78,7 +81,7 @@ class InExactLine():
     
 
 class ExactLine():
-    def __call__(self,f,x,s):
+    def __call__(self,p,x,s):
         def mf(a):
-            return(f(x+a*s))       
+            return(p.func(x+a*s))       
         return op.minimize(mf,0).x

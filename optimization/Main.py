@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from scipy import *
-from H import BadBroyden
+from H import DFPRank2Update
 from Line import ExactLine
-from Generic import QuasiNewton
 from Problem import Problem
 
 def f(x):
@@ -15,9 +14,10 @@ def f(x):
 
 p=Problem(f)
 #e=InExactLine(0.1,0.7,0.1,9.)
-e=ExactLine()
-res = e(p(),array([1.,1]),array([2.,2]))
+a=ExactLine()
+res = a(p,array([1.,1]),array([2.,2]))
 print(res)
+#qn = DFPRank2Update(p,a)
 
     
 
