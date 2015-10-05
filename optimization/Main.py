@@ -16,7 +16,7 @@ def f(x):
 p=Problem(f)
 #e=InExactLine(0.1,0.7,0.1,9.)
 e=ExactLine()
-res = e(p(),array([1.,1]),array([1.,1]))
+res = e(p(),array([1.,1]),array([2.,2]))
 print(res)
 
     

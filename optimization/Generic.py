@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from scipy import *
+                                                #hur äe denna generisk? 
 class QuasiNewton:
     def __init__(self,problem,H,a):
         self.problem = problem
@@ -11,7 +12,7 @@ class QuasiNewton:
         h = eye(len(x))
         while(error>tolerance):
             s=-dot(h,self.problem.grad(x))
-            xn = x+self.a(self.problem(),x,s)*x
+            xn = x+self.a(self.problem(),x,s)*x     #xn = x + a*s ? 
             p = self.problem()
             error = abs(p(xn)-p(x))
             delta = xn-x
