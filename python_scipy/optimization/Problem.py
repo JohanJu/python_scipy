@@ -7,7 +7,10 @@ class Problem():
         self.g=g
     
     def __call__(self):
-        return self.f
+        return self
+        
+    def func(self,x):
+        return self.f(x)
         
     def grad(self,x):
         if(self.g is not None):
