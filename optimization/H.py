@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from Generic import QuasiNewton
 from scipy import *
-class BadBroyden():
-    def __call__(self,h,delta,gamma):
+class BadBroyden(QuasiNewton):
+    def __call__(self,H,delta,gamma):
         return h #some update
         
-class GoodBroyden():
-    def __call__(self,h,delta,gamma):
-        return h #some update
+class GoodBroyden(QuasiNewton):
+    def __call__(self,H,delta,gamma):
+        u = delta-H*gamma;
+        uTranspose = u.transpose()
+        return h+(u*uTranspose)/(uTranspose*gamma)
 
 class DFPRank2Update(QuasiNewton):    
     def nextH(self,H,delta,gamma):
@@ -18,7 +20,7 @@ class DFPRank2Update(QuasiNewton):
         term2 = (HTimesGamma.dot(gammaTranspose.dot(H)))/(gammaTranspose.dot(HTimesGamma))  
         return H + term1 - term2
 
-class BFGSRank2Update():  
+class BFGSRank2Update(QuasiNewton):  
     def call(self,H,delta,gamma):
         deltaTranspose = delta.transpose()
         gammaTranspose = gamma.transpose()

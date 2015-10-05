@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
 from scipy import *
-#from H import *
-from Generic import QuasiNewton
+from H import *
+#from Generic import QuasiNewton
 from Line import *
 from Problem import Problem
 
@@ -22,7 +22,7 @@ p=Problem(f)
 a=InExactLine()
 #res = a(p,array([10.,10]),array([1.,1]))
 #print(res)
-qn = QuasiNewton(p,a)
+qn = DFPRank2Update(p,a)
 #print("4")
 #sys.stdout.flush()
 print(qn.solve(array([-5.,-10]),0.1))

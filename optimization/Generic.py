@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from scipy import *
+import abc
 import sys                                           #hur äe denna generisk? 
 class QuasiNewton():
     def __init__(self,problem,a):
@@ -40,30 +41,7 @@ class QuasiNewton():
             print(h)
             sys.stdout.flush()
         return x
-        
-    def nextH(self,H,delta,gamma):
-#        print("delta, gamma:")
-#        print(delta)
-#        print(gamma)
-        sys.stdout.flush()
     
-        deltaTranspose = delta.transpose()
-        gammaTranspose = gamma.transpose()
-        HTimesGamma = H.dot(gamma)
-                    
-#        print("deltaT, gammaT, h*gamma:")                                
-#        print(deltaTranspose)   
-#        print(gammaTranspose)
-#        print(HTimesGamma)
-        sys.stdout.flush()
-            
-            
-        term1 = (delta.dot(deltaTranspose))/(deltaTranspose.dot(gamma))
-        term2 = (HTimesGamma.dot(gammaTranspose.dot(H)))/(gammaTranspose.dot(HTimesGamma))
-        
-#        print("term1, term2:")                                
-#        print(term1)   
-#        print(term2)
-        sys.stdout.flush()
-        
-        return H + term1 - term2
+    @abc.abstractmethod
+    def nextH(self,H,delta,gamma):
+        return
