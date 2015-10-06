@@ -13,14 +13,15 @@ class QuasiNewton():
         h = matrix(eye(len(squeeze(asarray(x)))))
         print("h:",h)
         sys.stdout.flush()
-        while(1):
-            print("grad:",self.problem.grad(x))
+        for i in range(500):
+            g=self.problem.grad(x)
+            print("g:",g)
             print("x:",x)
             s=-h*self.problem.grad(x)
             s=s/sum(abs(s))
             print("s:",s)
             sys.stdout.flush()
-            if(sum(abs(s)) < tolerance):
+            if(sum(abs(g)) < tolerance):
                 print("return1")
                 return x
             a = self.a(self.problem(),x,s)
@@ -41,7 +42,9 @@ class QuasiNewton():
             print("next h:")
             print(h)
             sys.stdout.flush()
-            time.sleep(1)
+            print()
+            print()
+#            time.sleep(0.1)
         return x
     
     @abc.abstractmethod
