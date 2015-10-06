@@ -88,6 +88,8 @@ class InExactLine():
 
 class ExactLine():
     def __call__(self,p,x,s):
+        x = squeeze(asarray(x))
+        s = squeeze(asarray(s))
         def mf(a):
             return(p.func(x+a*s))       
-        return op.minimize(mf,0).x
+        return op.minimize(mf,0).x[0]

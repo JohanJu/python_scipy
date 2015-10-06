@@ -12,14 +12,12 @@ class GoodBroyden(QuasiNewton):
         print("delta",delta)
         print("gamma",gamma)
         sys.stdout.flush()
-        u = delta-H.dot(gamma);
+        u = delta-H*gamma;
         print("u",u)
-        uTranspose = u.transpose()
-        print("t",(u.dot(uTranspose)))
-        print("n",(uTranspose.dot(gamma)))
-        print("re ",H+(u.dot(uTranspose))/(uTranspose.dot(gamma)))
-        sys.stdout.flush()
-        return H+(u.dot(uTranspose))/(uTranspose.dot(gamma))
+        uT = u.transpose()
+        print("t",(u.dot(uT)))
+        print("n",(uT*gamma))
+        return H+(u*uT)/(uT*gamma)
 
 class DFPRank2Update(QuasiNewton):    
     def nextH(self,H,delta,gamma):

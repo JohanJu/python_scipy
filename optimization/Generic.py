@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from scipy import *
+import time
 import abc
 import sys                                           #hur äe denna generisk? 
 class QuasiNewton():
@@ -8,35 +9,27 @@ class QuasiNewton():
         self.a = a
         
     def solve(self,x,tolerance):
-        error = 1000;
-        h = eye(len(x))
-        print("h",h)
+        print(len(squeeze(asarray(x))))
+        h = matrix(eye(len(squeeze(asarray(x)))))
+        print("h:",h)
         sys.stdout.flush()
-        while(error>tolerance):
-            print("start")
+        while(1):
+            print("grad:",self.problem.grad(x))
+            print("x:",x)
+            s=-h*self.problem.grad(x)
+            s=s/sum(abs(s))
+            print("s:",s)
             sys.stdout.flush()
-            s=-dot(h,self.problem.grad(x))
-            print("next")
-            sys.stdout.flush()
-            print("s:")
-            print(s)
-            sys.stdout.flush()
-            if(sum(abs(s)) < 0.0001):
+            if(sum(abs(s)) < tolerance):
                 print("return1")
                 return x
-            xn = x+self.a(self.problem(),x,s)*s     #xn = x + a*s ? 
-            print("a:")
-            print(self.a(self.problem(),x,s))
+            a = self.a(self.problem(),x,s)
+            print("a:",a)
             sys.stdout.flush()
-            print("xn:")
-            print(xn)
-            sys.stdout.flush()
+            xn = x+(a*s)     #xn = x + a*s ? 
+            
             p = self.problem()
-            error = abs(p.func(xn)-p.func(x))
             delta = xn-x
-            if(sum(abs(delta)) < 0.0001):
-                print("return2")
-                return x
             gamma = self.problem.grad(xn)-self.problem.grad(x)
 
             x = xn           
@@ -48,6 +41,7 @@ class QuasiNewton():
             print("next h:")
             print(h)
             sys.stdout.flush()
+            time.sleep(1)
         return x
     
     @abc.abstractmethod
