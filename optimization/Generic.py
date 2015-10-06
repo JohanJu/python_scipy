@@ -14,9 +14,9 @@ class QuasiNewton():
         print("h:",h)
         sys.stdout.flush()
         for i in range(500):
+            print("x:",x)
             g=self.problem.grad(x)
             print("g:",g)
-            print("x:",x)
             s=-h*self.problem.grad(x)
             s=s/sum(abs(s))
             print("s:",s)
@@ -44,7 +44,7 @@ class QuasiNewton():
             sys.stdout.flush()
             print()
             print()
-#            time.sleep(0.1)
+            time.sleep(0.1)
         return x
     
     @abc.abstractmethod

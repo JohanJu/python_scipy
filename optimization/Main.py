@@ -19,7 +19,7 @@ def r(x):
 #qn = QuasiNewton(Problem(f),BadBroyden(),ExactLine())
 #print(qn.slove(array([1.,1]),0.01))
 
-x0 = matrix([0.,0]).transpose()
+x0 = matrix([0.5,0.5]).transpose()
 s0 = matrix([804.,400.])
 #print(5*x0)
 p=Problem(r)

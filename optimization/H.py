@@ -3,20 +3,14 @@ from Generic import QuasiNewton
 from scipy import *
 import sys
 class BadBroyden(QuasiNewton):
-    def __call__(self,H,delta,gamma):
-        return h #some update
+    def nextH(self,H,delta,gamma):
+        u = (delta-H*gamma)/(gamma*gamma.transpose())
+        return H+(u*gamma)
         
 class GoodBroyden(QuasiNewton):
     def nextH(self,H,delta,gamma):
-        print("H",H)
-        print("delta",delta)
-        print("gamma",gamma)
-        sys.stdout.flush()
         u = delta-H*gamma;
-        print("u",u)
         uT = u.transpose()
-        print("t",(u.dot(uT)))
-        print("n",(uT*gamma))
         return H+(u*uT)/(uT*gamma)
 
 class DFPRank2Update(QuasiNewton):    
