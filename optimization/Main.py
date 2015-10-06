@@ -26,6 +26,9 @@ p=Problem(r)
 a=ExactLine()
 #print(a(p,x0,s0))
 qn = GoodBroyden(p,a)
+#qn = DFPRank2Update(p,a)
+#qn = BFGSRank2Update(p,a)
+
 print("\n\n-xxx-\n",qn.solve(x0,2**(-10)),"\n-xxx-")
 
 #g = matrix([1,2])

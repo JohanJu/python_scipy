@@ -23,12 +23,12 @@ class DFPRank2Update(QuasiNewton):
         return H + term1 - term2
 
 class BFGSRank2Update(QuasiNewton):  
-    def call(self,H,delta,gamma):
+    def nextH(self,H,delta,gamma):
         deltaTranspose = delta.transpose()
         gammaTranspose = gamma.transpose()
         gammaTransposeTimesH = gammaTranspose*H
         deltaTransposeTimesGamma= deltaTranspose*gamma
-        factor1 = 1 + (gammaTransposeTimesH*gamma)/deltaTransposeTimesGamma
+        factor1 = eye(len(delta)) + (gammaTransposeTimesH*gamma)/deltaTransposeTimesGamma
         factor2 = (delta*deltaTranspose)/deltaTransposeTimesGamma
         term = (delta*gammaTransposeTimesH+H*gamma*deltaTranspose)/deltaTransposeTimesGamma
         return H + factor1*factor2 - term
