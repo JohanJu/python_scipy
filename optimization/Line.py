@@ -2,10 +2,11 @@
 from scipy import *
 from scipy import optimize as op
 
+
 class InExactLine():
    
     def __init__(self):
-        self.p=0.2
+        self.p=0.1
         self.s=0.7
         self.t=0.1
         self.x=9.

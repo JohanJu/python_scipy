@@ -13,13 +13,21 @@ class QuasiNewton():
         print("h",h)
         sys.stdout.flush()
         while(error>tolerance):
+            print("start")
             sys.stdout.flush()
             s=-dot(h,self.problem.grad(x))
+            print("next")
+            sys.stdout.flush()
             print("s:")
             print(s)
+            sys.stdout.flush()
+            if(sum(abs(s)) < 0.0001):
+                print("return1")
+                return x
             xn = x+self.a(self.problem(),x,s)*s     #xn = x + a*s ? 
             print("a:")
             print(self.a(self.problem(),x,s))
+            sys.stdout.flush()
             print("xn:")
             print(xn)
             sys.stdout.flush()
@@ -27,7 +35,7 @@ class QuasiNewton():
             error = abs(p.func(xn)-p.func(x))
             delta = xn-x
             if(sum(abs(delta)) < 0.0001):
-                print("return")
+                print("return2")
                 return x
             gamma = self.problem.grad(xn)-self.problem.grad(x)
 
