@@ -13,22 +13,22 @@ class GoodBroyden(QuasiNewton):
         uT = u.transpose()
         return H+(u*uT)/(uT*gamma)
 
-class DFPRank2Update(QuasiNewton):    
+class DFPRank2Update(QuasiNewton):
     def nextH(self,H,delta,gamma):
-        deltaTranspose = delta.transpose()
-        gammaTranspose = gamma.transpose()
-        HTimesGamma = H.dot(gamma)
-        term1 = (delta.dot(deltaTranspose))/(deltaTranspose.dot(gamma))
-        term2 = (HTimesGamma.dot(gammaTranspose.dot(H)))/(gammaTranspose.dot(HTimesGamma))  
+        dT = delta.transpose()
+        gT = gamma.transpose()
+        H_dot_g = H*gamma
+        term1 = (delta*dT)/(dT*gamma)
+        term2 = (H_dot_g*gT*H)/(gT*H_dot_g)
         return H + term1 - term2
 
-class BFGSRank2Update(QuasiNewton):  
+class BFGSRank2Update(QuasiNewton):
     def nextH(self,H,delta,gamma):
-        deltaTranspose = delta.transpose()
-        gammaTranspose = gamma.transpose()
-        gammaTransposeTimesH = gammaTranspose*H
-        deltaTransposeTimesGamma= deltaTranspose*gamma
-        factor1 = eye(len(delta)) + (gammaTransposeTimesH*gamma)/deltaTransposeTimesGamma
-        factor2 = (delta*deltaTranspose)/deltaTransposeTimesGamma
-        term = (delta*gammaTransposeTimesH+H*gamma*deltaTranspose)/deltaTransposeTimesGamma
+        dT = delta.transpose()
+        gT = gamma.transpose()
+        gT_dot_H = gT*H
+        dT_dot_g= dT*gamma
+        factor1 = eye(len(delta)) + (gT_dot_H*gamma)/dT_dot_g
+        factor2 = (delta*dT)/dT_dot_g
+        term = (delta*gT_dot_H+H*gamma*dT)/dT_dot_g
         return H + factor1*factor2 - term
