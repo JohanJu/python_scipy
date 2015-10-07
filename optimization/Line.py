@@ -5,85 +5,78 @@ from scipy import optimize as op
 
 class InExactLine():
    
-    def __init__(self):
-        self.p=0.1
-        self.s=0.7
-        self.t=0.1
-        self.x=9.
-    
-    #använder ej s
+    def __init__(self, p = 0.1, s = 0.7, t = 0.1, x = 9.):        
+        self.p = p
+        self.s=s
+        self.t=t
+        self.x=x
+  
     def __call__(self,p,x,s):
-        '''
-        fOfaL = f(a_L)
-        fOfa0 = f(a_0)
-        gradOfaL = f'(a_L)
-        gradOfa0 = f'(a_0)
+        self.aL = 0.
+        self.aU = 10.**99
+        self.a0 = 0.1
         
-        '''
-        aL = 0.
-        aU = 10.**99
-        a0 = 0.1
+        self.fOfaL = p.func(x+self.aL*s)
+        self.fOfa0 = p.func(x+self.a0*s)
+        self.derivOfaL = self.der(p,self.aL,x,s)
+        self.derivOfa0 = self.der(p,self.a0,x,s)
         
-        fOfaL = p.func(x+aL*s)
-        fOfa0 = p.func(x+a0*s)
-        gradOfaL = self.der(p,aL,x,s)
-        gradOfa0 = self.der(p,a0,x,s)
-        
-        
-        while not (self.LC(a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0) and self.RC(a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0)):
-            if not self.LC(a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
-                a0,aL = self.block1(a0,aL,gradOfa0,gradOfaL)
+
+        while not (self.LC() and self.RC()):
+            if not self.LC():
+                self.a0,self.aL = self.block1()
             else:
-                a0,aU = self.block2(a0,aU,aL,gradOfaL,fOfaL,fOfa0)
+                self.a0,self.aU = self.block2()
             
-            fOfaL = p.func(x+aL*s)
-            fOfa0 = p.func(x+a0*s)
-            gradOfaL = self.der(p,aL,x,s)
-            gradOfa0 = self.der(p,a0,x,s)
+            self.fOfaL = p.func(x+self.aL*s)
+            self.fOfa0 = p.func(x+self.a0*s)
+            self.derivOfaL = self.der(p,self.aL,x,s)
+            self.derivOfa0 = self.der(p,self.a0,x,s)
             
-        return a0
+        return self.a0
         
-    def der(self,p,a0,x,s):
+    def der(self,p,a,x,s):
         eps = 2**(-30)
-        return (p.func(x+(a0+eps)*s)-p.func(x+a0*s))/eps
+        return (p.func(x+(a+eps)*s)-p.func(x+a*s))/eps
         
-    def block1(self,a0,aL,gradOfa0,gradOfaL):
-        deltaA0 = self.extrapolation(a0,aL,gradOfa0,gradOfaL)
-        deltaA0 = max(deltaA0,self.t*(a0-aL))
-        deltaA0 = min(deltaA0,self.x*(a0-aL))
-        aL = a0
-        a0 = a0 + deltaA0
+    def block1(self):
+        deltaA0 = self.extrapolation()
+        deltaA0 = max(deltaA0, (self.t*(self.a0-self.aL)) )
+        deltaA0 = min(deltaA0, (self.x*(self.a0-self.aL)) )
+        aL = self.a0
+        a0 = self.a0 + deltaA0
         return a0,aL
         
-    def extrapolation(self,a0,aL,gradOfa0,gradOfaL):
-        return (a0-aL)*gradOfa0/(gradOfaL-gradOfa0)
+    def extrapolation(self):
+        return (self.a0-self.aL)*self.derivOfa0/(self.derivOfaL-self.derivOfa0)
     
-    def block2(self,a0,aU,aL,gradOfaL,fOfaL,fOfa0):
-        aU = min(a0,aU)
-        a0 = self.interpolation(a0,aL,gradOfaL,fOfaL,fOfa0)
-        a0 = max(a0,aL+self.t*(aU-aL))
-        a0 = min(a0, aU-self.t*(aU-aL))
-        a0 = a0                               #ta bort, har här ingen betydelse om det är ã eller a
+    def block2(self):
+        aU = min(self.a0,self.aU)
+        tempA0 = self.interpolation()
+        tempA0 = max(tempA0, (self.aL+self.t*(aU-self.aL)) )
+        tempA0 = min(tempA0, (aU-self.t*(aU-self.aL)) )
+        a0 = tempA0
         return a0,aU
     
-    def interpolation(self,a0,aL,gradOfaL,fOfaL,fOfa0):
-        return ((a0-aL)**2*gradOfaL)/(2*(fOfaL-fOfa0+(a0-aL)*gradOfaL))
+    def interpolation(self):
+        return ((self.a0-self.aL)**2*self.derivOfaL)/(2*(self.fOfaL-self.fOfa0+(self.a0-self.aL)*self.derivOfaL))
     
     '''
     Gör någon lösning på vilka conditions som ska användas
+    OBS RC samma för båda conditions
     '''
 
     #Goldstein conditions
-    def LC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
-        return fOfa0 >= (fOfaL + (1-self.p)*(a0-aL)*gradOfaL)
-    def RC(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
-        return fOfa0 <= (fOfaL + self.p*(a0-aL)*gradOfaL)
+    def LC(self):
+        return self.fOfa0 >= (self.fOfaL + (1-self.p)*(self.a0-self.aL)*self.derivOfaL)
+    def RC(self):
+        return self.fOfa0 <= (self.fOfaL + self.p*(self.a0-self.aL)*self.derivOfaL)
     
     #Wolfe-Powell conditions
-    def LC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
-        return gradOfa0 >= self.s*gradOfaL
-    def RC1(self,a0,aL,fOfa0,fOfaL,gradOfaL,gradOfa0):
-        return gradOfa0 <= (fOfaL + self.p*(a0-aL)*gradOfaL)
+    def LC1(self):
+        return self.derivOfa0 >= (self.s*self.derivOfaL)
+    def RC1(self):
+        return self.fOfa0 <= (self.fOfaL + self.p*(self.a0-self.aL)*self.derivOfaL)
     
 
 class ExactLine():
