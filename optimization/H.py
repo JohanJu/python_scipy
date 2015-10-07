@@ -4,8 +4,8 @@ from scipy import *
 import sys
 class BadBroyden(QuasiNewton):
     def nextH(self,H,delta,gamma):
-        u = (delta-H*gamma)/(gamma*gamma.transpose())
-        return H+(u*gamma)
+        u = (delta-H*gamma)/(gamma.transpose()*gamma)
+        return H+(u*gamma.transpose())
         
 class GoodBroyden(QuasiNewton):
     def nextH(self,H,delta,gamma):
