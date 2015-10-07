@@ -9,23 +9,25 @@ class QuasiNewton():
         self.a = a
         
     def solve(self,x,tolerance):
-        print(len(squeeze(asarray(x))))
+#        print(len(squeeze(asarray(x))))
+        re = []
         h = matrix(eye(len(squeeze(asarray(x)))))
-        print("h:",h)
+#        print("h:",h)
         sys.stdout.flush()
-        for i in range(500):
-            print("x:",x)
+        for i in range(50):
+            re.append(x)
+#            print("x:",x)
             g=self.problem.grad(x)
-            print("g:",g)
+#            print("g:",g)
             s=-h*self.problem.grad(x)
             s=s/sum(abs(s))
-            print("s:",s)
+#            print("s:",s)
             sys.stdout.flush()
             if(sum(abs(g)) < tolerance):
-                print("return1")
-                return x
+#                print("return1")
+                return re
             a = self.a(self.problem(),x,s)
-            print("a:",a)
+#            print("a:",a)
             sys.stdout.flush()
             xn = x+(a*s)     #xn = x + a*s ? 
             
@@ -39,13 +41,11 @@ class QuasiNewton():
             sys.stdout.flush()
             
             h=self.nextH(h,delta,gamma)
-            print("next h:")
-            print(h)
-            sys.stdout.flush()
-            print()
-            print()
-            time.sleep(0.1)
-        return x
+#            print("next h:",h)
+#            print()
+#            print()
+#            time.sleep(0.1)
+        return re
     
     @abc.abstractmethod
     def nextH(self,H,delta,gamma):

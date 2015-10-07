@@ -6,7 +6,7 @@ from scipy import optimize as op
 class InExactLine():
    
     def __init__(self):
-        self.p=0.1
+        self.p=0.4
         self.s=0.7
         self.t=0.1
         self.x=9.
