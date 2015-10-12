@@ -86,7 +86,7 @@ def gradchebyquad(x):
     return dot(chq[1:].reshape((1, -1)), UM).reshape((-1, ))
     
 if __name__ == '__main__':
-    x=linspace(0,1,4)
+    x=linspace(0,1,11)
     xmin= so.fmin_bfgs(chebyquad,x,gradchebyquad)  # should converge after 18 iterations
     print(xmin)
     
@@ -95,4 +95,4 @@ if __name__ == '__main__':
     a=ExactLine()
     qn = GoodBroyden(p,a)
     result = qn.solve(x0,2**(-10))
-    print(result)
+    print(result[-1])
