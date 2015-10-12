@@ -46,6 +46,8 @@ print("fmin",xmin)
 x0 = matrix(x).transpose()
 p=Problem(ch.chebyquad,ch.gradchebyquad)
 a=ExactLine()
+#a=Goldstein()
+#a=WolfePowell()
 qn = GoodBroyden(p,a)
 result = qn.solve(x0,2**(-10))
 ares = squeeze(asarray(result[-1]));
@@ -64,9 +66,4 @@ print("diff",ares-xmin)
 #result = qn.solve(x0,2**(-10))
 #plot(r,result)
 #print(result[-1])
-
-
-
-
-
 
