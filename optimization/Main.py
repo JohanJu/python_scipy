@@ -18,8 +18,10 @@ def r(x):
 x0 = matrix([0.,-0.1]).transpose()
 p=Problem(r)
 a=ExactLine()
+#a=Goldstein()
+#a=WolfePowell()
 qn = GoodBroyden(p,a)
-result = qn.solve(x0,2**(-10))
+result = qn.solve(x0,2**(-1))
 
 
 
@@ -28,7 +30,7 @@ result = qn.solve(x0,2**(-10))
 #qn = BFGSRank2Update(p,a)
 
 
-
+'''
 n = 100
 x = linspace(-0.2,1.2,n)
 y = linspace(-0.2,1.2,n)
@@ -46,8 +48,10 @@ y=[]
 for i in range(len(result)):
     x.append(result[i][0,0])
     y.append(result[i][1,0])
+
 plot(x,y,'k',linewidth=3)
 plot(x,y,'o',markersize=10,color='k')
 plot(x0[0,0],x0[1,0],'o',markersize=20,color='b')
 plot(result[-1][0,0],result[-1][1,0],'o',markersize=20,color='r')
+'''
 print(result[-1])

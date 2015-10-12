@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from scipy import *
 from scipy import optimize as op
+import abc
 
 class ExactLine():
     def __call__(self,p,x,s):
@@ -69,16 +70,23 @@ class InExactLine():
         return ((self.a0-self.aL)**2*self.derivOfaL)/(2*(self.fOfaL-self.fOfa0+(self.a0-self.aL)*self.derivOfaL))
     
 
-    #Goldstein conditions
+    @abc.abstractmethod
+    def RC(self):
+        return
+    @abc.abstractmethod    
+    def LC(self):
+        return
+
+class Goldstein(InExactLine):
     def LC(self):
         return self.fOfa0 >= (self.fOfaL + (1-self.p)*(self.a0-self.aL)*self.derivOfaL)
     def RC(self):
         return self.fOfa0 <= (self.fOfaL + self.p*(self.a0-self.aL)*self.derivOfaL)
-    
-    #Wolfe-Powell conditions
-    def LC1(self):
+
+class WolfePowell(InExactLine):
+    def LC(self):
         return self.derivOfa0 >= (self.s*self.derivOfaL)
-    def RC1(self):
+    def RC(self):
         return self.fOfa0 <= (self.fOfaL + self.p*(self.a0-self.aL)*self.derivOfaL)
     
 
