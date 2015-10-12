@@ -2,6 +2,14 @@
 from scipy import *
 from scipy import optimize as op
 
+class ExactLine():
+    def __call__(self,p,x,s):
+        x = squeeze(asarray(x))
+        s = squeeze(asarray(s))
+        def mf(a):
+            return(p.func(x+a*s))   
+    
+        return op.minimize(mf,0).x[0]
 
 class InExactLine():
    
@@ -60,10 +68,6 @@ class InExactLine():
     def interpolation(self):
         return ((self.a0-self.aL)**2*self.derivOfaL)/(2*(self.fOfaL-self.fOfa0+(self.a0-self.aL)*self.derivOfaL))
     
-    '''
-    Gör någon lösning på vilka conditions som ska användas
-    OBS RC samma för båda conditions
-    '''
 
     #Goldstein conditions
     def LC(self):
@@ -78,10 +82,3 @@ class InExactLine():
         return self.fOfa0 <= (self.fOfaL + self.p*(self.a0-self.aL)*self.derivOfaL)
     
 
-class ExactLine():
-    def __call__(self,p,x,s):
-        x = squeeze(asarray(x))
-        s = squeeze(asarray(s))
-        def mf(a):
-            return(p.func(x+a*s))       
-        return op.minimize(mf,0).x[0]

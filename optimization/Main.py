@@ -19,10 +19,15 @@ x0 = matrix([0.,-0.1]).transpose()
 p=Problem(r)
 a=ExactLine()
 qn = GoodBroyden(p,a)
+result = qn.solve(x0,2**(-10))
+
+
+
 #qn = BadBroyden(p,a)
 #qn = DFPRank2Update(p,a)
 #qn = BFGSRank2Update(p,a)
-result = qn.solve(x0,2**(-10))
+
+
 
 n = 100
 x = linspace(-0.2,1.2,n)
@@ -31,12 +36,11 @@ X, Y = meshgrid(x, y)
 Z = zeros([n,n])
 for i in range(n):
     for j in range(n):
-        t = r(array([X[i,j],Y[i,j]]))
-        if(t>2):
-            Z[i,j]=0
-        else:
-            Z[i,j]=t
-contour(X, Y, Z,10)
+        Z[i,j] = r(array([X[i,j],Y[i,j]]))
+V = [0.03,0.11,0.2,0.5,1,4,10,20,40,80]
+#colors=['r','b','g','k']
+#V = [0.003,0.01,0.018,0.025]
+contour(X, Y, Z, V)
 x=[]
 y=[]
 for i in range(len(result)):
