@@ -10,11 +10,13 @@ class Problem():
         return self
         
     def func(self,x):
+        x = squeeze(asarray(x))
         return self.f(x)
         
     def grad(self,x):
         if(self.g is not None):
-            return self.g(x)
+            x = squeeze(asarray(x))
+            return matrix(self.g(x)).transpose()
         else:
             x = squeeze(asarray(x))
             eps = 2**(-30)

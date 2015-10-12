@@ -14,6 +14,8 @@ class QuasiNewton():
         for i in range(50):
             re.append(x)
             g=self.problem.grad(x)
+#            print("h",h)
+#            print("g",g)
             s=-h*self.problem.grad(x)
             s=s/sum(abs(s))
             if(sum(abs(g)) < tolerance):
