@@ -58,7 +58,7 @@ def r(x):
 
 x0 = matrix([0.,-0.1]).transpose()
 p=Problem(r)
-a=WolfePowell()
+a=Goldstein()
 qn = GoodBroyden(p,a)
 #qn = BadBroyden(p,a)
 #qn = DFPRank2Update(p,a)

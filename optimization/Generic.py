@@ -29,6 +29,7 @@ class QuasiNewton():
             gamma = self.problem.grad(xn)-self.problem.grad(x)
             x = xn           
             h=self.nextH(h,delta,gamma)
+    
         return re
     
     @abc.abstractmethod
