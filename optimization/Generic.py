@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from scipy import *
+from scipy import linalg
 import time
 import abc
 import sys                                          
@@ -29,9 +30,29 @@ class QuasiNewton():
             gamma = self.problem.grad(xn)-self.problem.grad(x)
             x = xn           
             h=self.nextH(h,delta,gamma)
+            #for comparision only
+            h2 = linalg.inv(self.calcG(self.problem,x))
+            print("h",h)
+            print("h2",h2)
     
         return re
     
     @abc.abstractmethod
     def nextH(self,H,delta,gamma):
         return
+        
+    #for comparision only
+    def calcG(self,p,x):
+        x = squeeze(asarray(x));
+        n = len(x)
+        h = matrix(zeros([n,n]))
+        g1  = p.grad(x).transpose();
+        for i in range(n):   
+#            print("g1",g1)
+            eps = max(1,abs(x[i]))*(2**(-20))
+            x[i] += eps
+            g2 = p.grad(x).transpose();
+#            print("g2",g2)
+            x[i] -= eps
+            h[i] = (g2-g1)/eps
+        return 0.5*(h+h.transpose())
