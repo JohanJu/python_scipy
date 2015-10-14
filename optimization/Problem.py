@@ -22,6 +22,7 @@ class Problem():
             eps = 2**(-30)
             g = zeros(len(x))
             for i in range(len(x)):
+                eps = max(1,abs(x[i]))*(2**(-20))
                 x[i] += eps
                 t = self.f(x)
                 x[i] -= eps

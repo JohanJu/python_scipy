@@ -21,9 +21,8 @@ class QuasiNewton():
             if(sum(abs(g)) < tolerance):
                 return re
             a = self.a(self.problem(),x,s)
-#            if(a < 0.000001):
-#                return re
-#               a = 0.01
+            if(a < 0.000001):
+               a = 0.01
             xn = x+(a*s)       
             p = self.problem()
             delta = xn-x
