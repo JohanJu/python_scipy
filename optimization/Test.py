@@ -21,18 +21,22 @@ class Newton():
        
     def solve(self,x,tolerance):
         re = []
-        for i in range(50):
+        for i in range(10):
             re.append(x)
+            print("x",x)
             g=self.problem.grad(x)
             G = self.calcG(self.problem,x)
-            
+            print("g",g)
+            print("G",G)
             try:
                 L = linalg.cholesky(G, lower=True)     
-            except LinAlgError:
+            except Exception:
                 print("linalgerror")
             ch = linalg.cho_factor(G,L)
             s=-linalg.cho_solve(ch,g)
-            
+#            s=-linalg.solve(G,g)
+            print("s",s)
+            print()
 #            print("h",h)
             s=s/sum(abs(s))
             if(sum(abs(g)) < tolerance):
@@ -62,11 +66,11 @@ class Newton():
             h[i] = (g2-g1)/eps
         return 0.5*(h+h.transpose())
     
-x0 = matrix([0.,-0.1]).transpose()
+x0 = matrix([1.,1.]).transpose()
 p=Problem(f)
 #a=ExactLine()
 print("test.py")
 qn = Newton(p)
-result = qn.solve(x0,2**(-20))
+result = qn.solve(x0,2**(-4))
 print(result[-1])
 #plot(f,result)
