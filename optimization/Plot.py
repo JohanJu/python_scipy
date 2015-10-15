@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# @author: Caroline Brandberg, Johan Ju
 import pylab as py
 py.rcParams['figure.figsize'] = 12, 12
 from scipy import *

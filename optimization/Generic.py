@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+# @author: Caroline Brandberg, Johan Ju
 from scipy import *
 from scipy import linalg
 import abc                                        
+
 class QuasiNewton():
     def __init__(self,problem,a):
         self.problem = problem
@@ -28,6 +30,11 @@ class QuasiNewton():
             gamma = self.problem.grad(xn)-self.problem.grad(x)
             x = xn           
             h=self.nextH(h,delta,gamma)
+            if(0): # 1 to compare hessian
+                n = Newton(self.problem)
+                h2 = linalg.inv(n.calcG(self.problem,x))
+                print("h",h)
+                print("h2",h2)
     
         return re
     
