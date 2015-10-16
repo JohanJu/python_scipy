@@ -1,5 +1,7 @@
 import scipy as sci
 from mpi4py import MPI
+
+'''
 rank = MPI.COMM_WORLD.rank
 a = sci.array([1,2,3])*(rank*9+1)
 print("rank ",rank," a1 ",a)
@@ -14,3 +16,9 @@ else:
 print("rank ",rank," a2 ",a)
 
 #run with "mpiexec -n 2 python test.py"
+'''
+
+rank = MPI.COMM_WORLD.Get_rank()
+size = MPI.COMM_WORLD.Get_size()
+
+print('rank', rank)

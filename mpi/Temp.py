@@ -31,7 +31,8 @@ if(1 is 1):
         A1=sci.hstack((sci.vstack((T,I)),sci.vstack((I,T))))
         
         b1 = -sci.array([Tn+Th,Tn,Tn,ld0[0],ld0[1]+Tw,ld1[0]+Th,ld1[1],Tn,Tn,Tn+Tw])
-    
+        print(A1)
+        print(b1)
         u1 = sci.linalg.solve(A1,b1)
         u1 = w*u1+(1-w)*u1o
         u1o=u1
@@ -96,4 +97,3 @@ if(1 is 1):
         print(u1)
         print(u2)
         
-
