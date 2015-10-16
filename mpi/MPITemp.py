@@ -3,6 +3,11 @@ import scipy as sci
 import scipy.linalg as linalg
 from mpi4py import MPI
 
+import matplotlib.pyplot as plt
+
+import pylab as py
+py.rcParams['figure.figsize'] = 12, 12
+
 '''
 ln = lambda neumann
 ld = lambda dirichlet
@@ -138,7 +143,6 @@ if(rank is 3):
         pmat[r+4][3] = round(ld0[k],1)
         pmat[r+1][6] = round(ld1[k],1)
         
-    print("\n\n",i)
     pmat[0][4] = round(Th)
     pmat[0][5] = round(Th)
     pmat[0][3] = round((Th+Tn)/2)
@@ -170,7 +174,9 @@ if(rank is 3):
     pmat[0][7] = Tn
     pmat[0][8] = Tn        
     print(pmat)
-    print()     
-
+    
+    plt.matshow(pmat)  
+    plt.colorbar()
+    py.show()
 
         
