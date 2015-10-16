@@ -9,7 +9,7 @@ ld = lambda dirichlet
 
 rank = MPI.COMM_WORLD.rank
 
-N = 3.
+N = 3
 dx = 1./N
 Tn = 15.
 Tw = 5.
@@ -31,8 +31,8 @@ if(1 is 1):
         A1=sci.hstack((sci.vstack((T,I)),sci.vstack((I,T))))
         
         b1 = -sci.array([Tn+Th,Tn,Tn,ld0[0],ld0[1]+Tw,ld1[0]+Th,ld1[1],Tn,Tn,Tn+Tw])
-        print(A1)
-        print(b1)
+#        print(A1)
+#        print(b1)
         u1 = sci.linalg.solve(A1,b1)
         u1 = w*u1+(1-w)*u1o
         u1o=u1
@@ -78,22 +78,26 @@ if(1 is 1):
         
         pmat=sci.zeros([2*N+1,3*N+1])
         
-#        for r in range(N-1):
-#            for k in range(N-1):
-#                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
-#                
-#        for r in range(N-1):
-#            for k in range(N-1):
-#                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
-#                
-#        for r in range(N-1):
-#            for k in range(N-1):
-#                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
+    for r in range(N-1):
+        for k in range(N-1):
+            pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
+            
+    for r in range(2*N-1):
+        for k in range(N-1):
+            pmat[r+1][k+4] = round(u1[k*(2*N-1)+r],1)
+            
+    for r in range(N-1):
+        for k in range(N-1):
+            pmat[r+1][k+7] = round(u2[k*(N-1)+r],1)
+            
+    for r in range(N-1):
+        pmat[r+4][3] = round(ld0[k],1)
+        pmat[r+1][6] = round(ld1[k],1)
                 
-#    print(pmat)
+    print(pmat)
                 
-        print("\n\n",i)
-        print(u0)
-        print(u1)
-        print(u2)
+#        print("\n\n",i)
+#        print(u0)
+#        print(u1)
+#        print(u2)
         
