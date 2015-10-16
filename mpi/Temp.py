@@ -5,6 +5,8 @@ from mpi4py import MPI
 '''
 ln = lambda neumann
 ld = lambda dirichlet
+ldo = lambda dirichlet old
+
 '''
 
 rank = MPI.COMM_WORLD.rank
@@ -22,7 +24,10 @@ if(1 is 1):
     u2o = sci.ones((N-1)**2)*20
     ld0 = sci.ones(N-1)*20
     ld1 = sci.ones(N-1)*20
-    for i in range(80):
+    ldo0 = ld0
+    ldo1 = ld1
+    
+    for i in range(10):
         size = 2*N-1
         main = sci.ones(size)*-4
         sub = sci.ones(size-1)
@@ -31,8 +36,6 @@ if(1 is 1):
         A1=sci.hstack((sci.vstack((T,I)),sci.vstack((I,T))))
         
         b1 = -sci.array([Tn+Th,Tn,Tn,ld0[0],ld0[1]+Tw,ld1[0]+Th,ld1[1],Tn,Tn,Tn+Tw])
-        print(A1)
-        print(b1)
         u1 = sci.linalg.solve(A1,b1)
         u1 = w*u1+(1-w)*u1o
         u1o=u1
@@ -56,6 +59,8 @@ if(1 is 1):
         u0o=u0
         
         ld0 = sci.array([u0[2]-ln0[0]*dx,u0[3]-ln0[1]*dx])#to 1
+        ld0 = w*ld0 + (1-w)*ldo0
+        ldo0 = ld0        
         
 #        print(ld0)
         #Rum 2
@@ -75,8 +80,10 @@ if(1 is 1):
         u2o=u2
         
         ld1 = sci.array([u2[0]-ln1[0]*dx,u2[1]-ln1[1]*dx])#to 1
+        ld1 = w*ld1 + (1-w)*ldo1
+        ldo1 = ld1
         
-        pmat=sci.zeros([2*N+1,3*N+1])
+#        pmat=sci.zeros([2*N+1,3*N+1])
         
 #        for r in range(N-1):
 #            for k in range(N-1):
