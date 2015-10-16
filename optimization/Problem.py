@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# @author: Caroline Brandberg, Johan Ju
 from scipy import *
 class Problem():
     

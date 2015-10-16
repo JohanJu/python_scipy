@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# @author: Caroline Brandberg, Johan Ju
 from Generic import QuasiNewton
 from scipy import *
 import sys
