@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# @author: Caroline Brandberg, Johan Ju
 from scipy import *
 from scipy import optimize as op
 import abc
