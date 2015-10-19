@@ -126,6 +126,7 @@ if(rank is 3):
     MPI.COMM_WORLD.Recv(ld1, source = 1)
         
     pmat=sci.zeros([2*N+1,3*N+1])
+    pmat.fill(-20)
     
     for r in range(N-1):
         for k in range(N-1):
@@ -175,7 +176,7 @@ if(rank is 3):
     pmat[0][8] = Tn        
     print(pmat)
     
-    plt.matshow(pmat)  
+    plt.matshow(pmat,interpolation='lanczos')  
     plt.colorbar()
     py.show()
 

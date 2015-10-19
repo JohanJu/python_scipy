@@ -36,7 +36,7 @@ else:
 Tn = 15.
 Tw = 5.
 Th = 40.
-N = 3
+N = 4
 size = (N-1)*(2*N-1)
 u = sci.zeros(size)
 b = sci.zeros(size)
@@ -85,10 +85,13 @@ for i in range(N-1):
     for j in range(2*N-1):
         setAb(j,i)
 
-#b = -b
+b = -b
 #print(A)
 u=sci.linalg.solve(A,b)
-#print(A)
+print("A")
+print(A)
+print("b")
+print(b)
 print(b.reshape(N-1,-1).transpose())
 #print(u)
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scipy as sci
 from mpi4py import MPI
-
+import matplotlib.pyplot as plt
 '''
 ln = lambda neumann
 ld = lambda dirichlet
@@ -16,18 +16,18 @@ dx = 1./N
 Tn = 15.
 Tw = 5.
 Th = 40.
-w = 0.8
+w = 0.3
 
 if(1 is 1):
-    u1o = sci.ones((N-1)*(2*N-1))*20
-    u0o = sci.ones((N-1)**2)*20
-    u2o = sci.ones((N-1)**2)*20
-    ld0 = sci.ones(N-1)*20
-    ld1 = sci.ones(N-1)*20
+    u1o = sci.ones((N-1)*(2*N-1))*-20
+    u0o = sci.ones((N-1)**2)*-20
+    u2o = sci.ones((N-1)**2)*-20
+    ld0 = sci.ones(N-1)*-20
+    ld1 = sci.ones(N-1)*-20
     ldo0 = ld0
     ldo1 = ld1
     
-    for i in range(10):
+    for i in range(20):
         size = 2*N-1
         main = sci.ones(size)*-4
         sub = sci.ones(size-1)
@@ -84,72 +84,68 @@ if(1 is 1):
         ld1 = w*ld1 + (1-w)*ldo1
         ldo1 = ld1
         
-#        pmat=sci.zeros([2*N+1,3*N+1])
-#        
-#        for r in range(N-1):
-#            for k in range(N-1):
-#                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
-#                
-#        for r in range(2*N-1):
-#            for k in range(N-1):
-#                pmat[r+1][k+4] = round(u1[k*(2*N-1)+r],1)
-#                
-#        for r in range(N-1):
-#            for k in range(N-1):
-#                pmat[r+1][k+7] = round(u2[k*(N-1)+r],1)
-#                
-#        for r in range(N-1):
-#            pmat[r+4][3] = round(ld0[k],1)
-#            pmat[r+1][6] = round(ld1[k],1)
-#    
-#        pmat[0][4] = round(Th)
-#        pmat[0][5] = round(Th)
-#        pmat[0][3] = round((Th+Tn)/2)
-#        
-#        pmat[3][0] = round((Th+Tn)/2)
-#        pmat[4][0] = round(Th)
-#        pmat[5][0] = round(Th)
-#        pmat[6][0] = round((Th+Tn)/2)
-#    
-#        
-#        pmat[0][9] = round((Th+Tn)/2)
-#    
-#        pmat[1][9] = round(Th)
-#        pmat[2][9] = round(Th)
-#        
-#        pmat[3][9] = round((Th+Tn)/2)
-#    
-#        
-#        pmat[6][4] = round(Tw)
-#        pmat[6][5] = round(Tw)
-#        pmat[6][6] = round((Tw+Tn)/2)
-#    
-#        pmat[3][1] = Tn
-#        pmat[3][2] = Tn
-#        pmat[3][3] = Tn
-#        pmat[2][3] = Tn
-#        pmat[1][3] = Tn
-#        
-#        pmat[3][6] = Tn
-#        pmat[4][6] = Tn
-#        pmat[5][6] = Tn
-#        pmat[3][7] = Tn
-#        pmat[3][8] = Tn
-#        
-#        pmat[6][1] = Tn
-#        pmat[6][2] = Tn
-#        pmat[6][3] = (Tn+Tw)/2
-#        
-#        pmat[0][6] = (Tn+Th)/2
-#        pmat[0][7] = Tn
-#        pmat[0][8] = Tn
-#    
-#                    
+        pmat=sci.zeros([2*N+1,3*N+1])
+        
+        for r in range(N-1):
+            for k in range(N-1):
+                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
+                
+        for r in range(2*N-1):
+            for k in range(N-1):
+                pmat[r+1][k+4] = round(u1[k*(2*N-1)+r],1)
+                
+        for r in range(N-1):
+            for k in range(N-1):
+                pmat[r+1][k+7] = round(u2[k*(N-1)+r],1)
+                
+        for r in range(N-1):
+            pmat[r+4][3] = round(ld0[k],1)
+            pmat[r+1][6] = round(ld1[k],1)
+    
+        pmat[0][4] = round(Th)
+        pmat[0][5] = round(Th)
+        pmat[0][3] = round((Th+Tn)/2)
+        
+        pmat[3][0] = round((Th+Tn)/2)
+        pmat[4][0] = round(Th)
+        pmat[5][0] = round(Th)
+        pmat[6][0] = round((Th+Tn)/2)
+    
+        
+        pmat[0][9] = round((Th+Tn)/2)
+    
+        pmat[1][9] = round(Th)
+        pmat[2][9] = round(Th)
+        
+        pmat[3][9] = round((Th+Tn)/2)
+    
+        
+        pmat[6][4] = round(Tw)
+        pmat[6][5] = round(Tw)
+        pmat[6][6] = round((Tw+Tn)/2)
+    
+        pmat[3][1] = Tn
+        pmat[3][2] = Tn
+        pmat[3][3] = Tn
+        pmat[2][3] = Tn
+        pmat[1][3] = Tn
+        
+        pmat[3][6] = Tn
+        pmat[4][6] = Tn
+        pmat[5][6] = Tn
+        pmat[3][7] = Tn
+        pmat[3][8] = Tn
+        
+        pmat[6][1] = Tn
+        pmat[6][2] = Tn
+        pmat[6][3] = (Tn+Tw)/2
+        
+        pmat[0][6] = (Tn+Th)/2
+        pmat[0][7] = Tn
+        pmat[0][8] = Tn
+        l, =plt.matshow(pmat,interpolation='lanczos')  
+        plt.colorbar() 
 #        print(pmat)
 #        print()
-                
-#        print("\n\n",i)
-#        print(u0)
-#        print(u1)
-#        print(u2)
+
         
