@@ -4,6 +4,8 @@ import scipy.linalg as linalg
 from mpi4py import MPI
 import matplotlib.pyplot as plt
 import pylab as py
+sci.set_printoptions(linewidth =1000)
+sci.set_printoptions(threshold=50000)
 py.rcParams['figure.figsize'] = 12, 12
 
 '''
@@ -23,7 +25,7 @@ Th = 40.
 T0 = 20
 w = 0.8
 
-NbrItr = 1
+NbrItr = 10
 
 
 def setAb(r,k,m,n):
@@ -70,7 +72,10 @@ def setAb(r,k,m,n):
                 b[pos] -= Tn
         else:
             A[pos][pos] += 1
-            b[pos] -=ln[r]
+            if(rank is 0):
+                b[pos] +=ln[r]
+            else:
+                b[pos] -=ln[r]
     else:
         A[pos][pos+m] = 1  
 
@@ -80,6 +85,9 @@ if(rank is 1):
     n = N-1
     ld0 = sci.ones(n)*T0
     ld1 = sci.ones(n)*T0
+elif(rank is 3):
+    m = 2*N+1
+    n = 3*N+1
 else:
     m = N-1
     n = N-1
@@ -94,15 +102,19 @@ uo = sci.ones(size)*T0
 for i in range(NbrItr):
                 
     if(rank is 1):
+        b = sci.zeros(size)
         for j in range(n):
             for k in range(m):
                 setAb(k,j,m,n)
         u = sci.linalg.solve(A,b)
         u = w*u+(1-w)*uo
         uo=u
-        print(u)
+#        print(i,"1",b)
         ln0 = ld0-u[n+1:m]
         ln1 = ld1-u[m*(n-1):m*(n-1)+n]
+#        print(ld0)
+#        print(u[n+1:m])
+#        print(ln0)
         MPI.COMM_WORLD.Send(ln0, dest = 0)
         MPI.COMM_WORLD.Send(ln1, dest = 2)
         ld0 = sci.zeros(n)
@@ -111,8 +123,8 @@ for i in range(NbrItr):
         MPI.COMM_WORLD.Recv(ld1, source = 2)
 #        print(ln0)
 #        print(ln1)
-#        print(ld0)
-#        print(ld1)
+#        print(i,"0",ld0)
+#        print(i,"1",ld1)
         MPI.COMM_WORLD.Send(u, dest = 3)
         MPI.COMM_WORLD.Send(ld0, dest = 3)
         MPI.COMM_WORLD.Send(ld1, dest = 3)
@@ -120,26 +132,30 @@ for i in range(NbrItr):
     if(rank is 0):
         ln = sci.zeros(n)
         MPI.COMM_WORLD.Recv(ln, source = 1)
+        b = sci.zeros(size)
         for j in range(n):
             for k in range(m):
                 setAb(k,j,m,n)
         u = sci.linalg.solve(A,b)
         u = w*u+(1-w)*uo
         uo=u
-        
         ld = u[(n-1)*n:]-ln
         ld = w*ld + (1-w)*ldo
         ldo = ld        
         MPI.COMM_WORLD.Send(ld, dest = 1)
         MPI.COMM_WORLD.Send(u, dest = 3)
+#        print(i,"0",u)
     #Rum 2
     if(rank is 2):
         ln = sci.zeros(n)
         MPI.COMM_WORLD.Recv(ln, source = 1)
+        ln = sci.array(ln[::-1])
+#        print(ln/dx)
+        b = sci.zeros(size)
         for j in range(n):
             for k in range(m):
                 setAb(k,j,m,n)
-        ln = ln[::-1]
+#        print(b)
         u = sci.linalg.solve(A,b)
         u = w*u+(1-w)*uo
         uo=u
@@ -151,6 +167,7 @@ for i in range(NbrItr):
 #        print(ldr)
         MPI.COMM_WORLD.Send(ldr, dest = 1)
         MPI.COMM_WORLD.Send(ur, dest = 3)
+#        print(i,"2",ur)
         
     if(rank is 3):
 #        print("hello")
@@ -165,22 +182,28 @@ for i in range(NbrItr):
         MPI.COMM_WORLD.Recv(ld0, source = 1)
         MPI.COMM_WORLD.Recv(ld1, source = 1)
             
-        pmat=sci.zeros([2*N+1,3*N+1])
+        pmat=sci.zeros([m,n])
         pmat.fill(-20)
         
         for r in range(N-1):
             for k in range(N-1):
-                pmat[r+4][k+1] = round(u0[k*(N-1)+r],1)
+                pmat[r+N+1][k+1] = round(u0[k*(N-1)+r],3)
                 
         for r in range(2*N-1):
             for k in range(N-1):
-                pmat[r+1][k+4] = round(u1[k*(2*N-1)+r],1)
+                pmat[r+1][k+N+1] = round(u1[k*(2*N-1)+r],3)
                 
         for r in range(N-1):
             for k in range(N-1):
-                pmat[r+1][k+7] = round(u2[k*(N-1)+r],1)
+                pmat[r+1][k+2*N+1] = round(u2[k*(N-1)+r],3)
                 
         for r in range(N-1):
-            pmat[r+4][3] = round(ld0[k],1)
-            pmat[r+1][6] = round(ld1[k],1)
-#        print(pmat)
+            pmat[r+N+1][N] = round(ld0[k],3)
+            pmat[r+1][2*N] = round(ld1[k],3)
+            
+
+        if(i is NbrItr-1):
+            print(pmat)
+#           plt.matshow(pmat)  
+#           plt.colorbar()
+#           py.show()
