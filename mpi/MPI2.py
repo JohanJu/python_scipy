@@ -5,6 +5,7 @@ from mpi4py import MPI
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pylab as py
+import sys
 sci.set_printoptions(linewidth =1000)
 sci.set_printoptions(threshold=50000)
 py.rcParams['figure.figsize'] = 12, 12
@@ -17,14 +18,14 @@ ldo = lambda dirichlet old
 '''
 rank = MPI.COMM_WORLD.rank
 
-N = 10
+N = 20
 Tn = 15.
 Tw = 5.
 Th = 40.
-T0 = 20
-w = 0.8
+T0 = -20
+w = 0.5
 
-NbrItr = 3
+NbrItr = 20
 
 
 def setAb(r,k,m,n):
@@ -159,7 +160,7 @@ for i in range(NbrItr):
         MPI.COMM_WORLD.Recv(u1, source = 1)       
         MPI.COMM_WORLD.Recv(ld0, source = 1)
         MPI.COMM_WORLD.Recv(ld1, source = 1)
-            
+        pmat[i][0][0]= 40
         
         for r in range(N-1):
             for k in range(N-1):
@@ -177,23 +178,29 @@ for i in range(NbrItr):
             pmat[i][r+N+1][N] = round(ld0[r],3)
             pmat[i][r+1][2*N] = round(ld1[r],3)
             
-        plt.matshow(pmat[i])
-        py.show()
-#    pi = 0
-#    def generate_data():
-#        return pmat[pi]
-#
-#    def update(data):
-#        mat.set_data(data)
-#        return mat 
-#    
-#    def data_gen():
-#        while True:
-#            yield generate_data()
-#    
-#    fig, ax = plt.subplots()
-#    mat = ax.matshow(generate_data())
-#    plt.colorbar(mat)
-#    ani = animation.FuncAnimation(fig, update, data_gen, interval=3000)
-#    plt.show()
+#        if(i is 9):
+#            plt.matshow(pmat[i])
+#            py.show()
+if(rank is 3):
+    i = -1
+    def generate_data():
+        global i
+        i+=1
+        if(i is NbrItr):
+            sys.exit(0)
+        return pmat[i]
+    
+    def update(data):
+        mat.set_data(data)
+        return mat 
+    
+    def data_gen():
+        while True:
+            yield generate_data()
+    
+    fig, ax = plt.subplots()
+    mat = ax.matshow(generate_data())
+    plt.colorbar(mat)
+    ani = animation.FuncAnimation(fig, update, data_gen, interval=500)
+    plt.show()
         
